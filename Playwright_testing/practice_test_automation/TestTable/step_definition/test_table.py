@@ -39,6 +39,11 @@ def click_the_visible_btn(open_page, btn):
     page = open_page
     page.click_btn(btn)
 
+@when(parsers.parse('user sets sort by to "{sorting_value}"'))
+def click_sort_by(open_page, sorting_value):
+    page = open_page
+    page.use_sorting_option(sorting_value)
+
 #Then
 
 @then(parsers.parse('verify only "{lang}" language course available'))
@@ -69,3 +74,7 @@ def verify_all_values_reset(open_page):
 def verify_btn_hidden(open_page, btn):
     page = open_page
     page.check_btn_hidden(btn)
+@then(parsers.parse('verify visible rows are ordered by "{sorting_value}"'))
+def verify_enrollment_order(open_page, sorting_value):
+    page = open_page
+    page.verify_sort_order(sorting_value)

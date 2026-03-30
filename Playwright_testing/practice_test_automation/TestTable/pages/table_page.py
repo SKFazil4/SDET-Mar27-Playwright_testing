@@ -1,4 +1,6 @@
 from playwright.sync_api import Page, expect
+from pyodbc import lowercase
+
 
 class Table:
     def __init__(self, page:Page):
@@ -111,3 +113,30 @@ class Table:
 
     def check_btn_hidden(self, btn):
         expect(self.page.get_by_role("button", name=btn)).to_be_hidden()
+
+    def use_sorting_option(self, sorting_value):
+        self.page.locator("#sortBy").select_option(sorting_value)
+
+    def verify_sort_order(self, sorting_value):
+        headers = self.page.locator("th")
+        know_index = None
+        for index in range(headers.count()):
+            if headers.nth(index).inner_text().strip() == sorting_value:
+                know_index = index
+                break
+        rows = self.page.locator("tbody tr:visible")
+        prev_values = {
+            "enroll": 0,
+            "course": 'a'
+        }
+        for i in range(rows.count()):
+            row = rows.nth(i)
+            if sorting_value == "Enrollments":
+                row_num = int(row.locator("td").nth(know_index).inner_text())
+                assert row_num >= prev_values["enroll"]
+                prev_values["enroll"] = row_num
+            elif sorting_value == "Course Name":
+                row_num = row.locator("td").nth(know_index).inner_text()
+                print(row_num)
+                assert row_num.lower() >= prev_values["course"]
+                prev_values["course"] = row_num.lower()

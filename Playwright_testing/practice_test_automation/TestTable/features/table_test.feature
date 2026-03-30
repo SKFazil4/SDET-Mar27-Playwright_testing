@@ -34,3 +34,13 @@ Feature: Test Table
     And click "Reset" button
     Then verify all filters are reset
     And verify "Reset" button is hidden
+
+  Scenario: Sort by enrollments
+    Given practice page
+    When user sets sort by to "Enrollments"
+    Then verify visible rows are ordered by "Enrollments"
+
+  Scenario: Sort by Course Name
+    Given practice page
+    When user sets sort by to "Course Name"
+    Then verify visible rows are ordered by "Course Name"
